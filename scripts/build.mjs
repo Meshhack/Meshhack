@@ -770,10 +770,14 @@ function npmBlocks(npm) {
 
 const attr = (s) => esc(s).replace(/"/g, '&quot;');
 
-// GitHub renames <a name="work"> to "user-content-work". Its own script maps
-// #work onto that, but not everywhere: on the profile page in Chrome a #work
-// link changes the address and scrolls nowhere. Linking to the full name needs
-// no script at all, so it works in every browser.
+// Two things learned from the live page:
+// - GitHub renames <a id="work"> to "user-content-work". Its own script maps
+//   #work onto that, but not everywhere: on the profile page in Chrome a #work
+//   link changes the address and scrolls nowhere. Linking to the full name
+//   needs no script at all, so it works in every browser.
+// - The anchor must be an id, not a name. GitHub leaves room above an id
+//   target for its sticky "Overview / Repositories" bar; a name target lands
+//   underneath that bar, which hides the tab row a visitor just jumped to.
 const jump = (name) => `#user-content-${name}`;
 const picture = (file, attrs) =>
   `<picture><source media="(max-width: 600px)" srcset="assets/${file}-narrow.svg"><img src="assets/${file}.svg" ${attrs}></picture>`;
@@ -793,7 +797,7 @@ function readme({ tabShares, buttonShares, alts, npm }) {
       })
       .join('');
   const screen = (file, tab, anchor = tab, target = tab) =>
-    `<p><a name="${anchor}"></a>${tabRow(tab)}<br><a href="${jump(target)}">${picture(file, `width="100%" align="top" alt="${attr(alts[file])}"`)}</a></p>`;
+    `<p><a id="${anchor}"></a>${tabRow(tab)}<br><a href="${jump(target)}">${picture(file, `width="100%" align="top" alt="${attr(alts[file])}"`)}</a></p>`;
 
   const buttons = PROFILE.buttons
     .map(([key, label, url], i) => `<a href="${url}">${picture(`btn-${key}`, `width="${buttonShares[i]}%" align="top" alt="${attr(label)}"`)}</a>`)
