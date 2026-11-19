@@ -229,15 +229,11 @@ export const PROFILE = {
     },
     // The line to run. GitHub puts a copy button on each one.
     run: {
-      callbackdesk: 'npx callbackdesk doctor <your-callback-url>',
+      callbackdesk: 'npx callbackdesk doctor "<your-callback-url>"',
       'daraja-skills': 'npx daraja-skills install',
       '@meshark/safaricom-daraja-mcp': 'npm i -g @meshark/safaricom-daraja-mcp',
       '@meshark/create-mini-app': 'npx @meshark/create-mini-app my-store --template e-commerce',
       'create-safaricom-mini-app': 'npx create-safaricom-mini-app my-app',
-    },
-    // Packages whose code is public on GitHub.
-    source: {
-      '@meshark/safaricom-daraja-mcp': 'https://github.com/Meshhack/safaricom-daraja-mcp',
     },
     order: [
       'callbackdesk',
@@ -282,6 +278,7 @@ export const PROFILE = {
         rows: [
           ['say hello', 'the first button under this window. a short form, here on github'],
           ['github', 'github.com/Meshhack'],
+          ['npm', 'npmjs.com/~meshark'],
           ['x', '@meshhark'],
           ['web', 'meshack.co.ke — the terminal you can actually type in'],
         ],
@@ -296,7 +293,8 @@ export const PROFILE = {
   // The first is the one to press. An arrow marks the ones that leave GitHub.
   buttons: [
     ['hello', 'say hello', 'https://github.com/Meshhack/Meshhack/issues/new?template=hello.yml'],
-    ['follow', 'follow on github', 'https://github.com/Meshhack'],
+    ['follow', 'follow', 'https://github.com/Meshhack'],
+    ['npm', 'npm ↗', 'https://www.npmjs.com/~meshark'],
     ['site', 'meshack.co.ke ↗', 'https://www.meshack.co.ke'],
     ['x', 'x ↗', 'https://x.com/meshhark'],
   ],

@@ -769,6 +769,12 @@ function npmBlocks(npm) {
 // ────────────────────────────────────────────────────────────── readme ──
 
 const attr = (s) => esc(s).replace(/"/g, '&quot;');
+
+// GitHub renames <a name="work"> to "user-content-work". Its own script maps
+// #work onto that, but not everywhere: on the profile page in Chrome a #work
+// link changes the address and scrolls nowhere. Linking to the full name needs
+// no script at all, so it works in every browser.
+const jump = (name) => `#user-content-${name}`;
 const picture = (file, attrs) =>
   `<picture><source media="(max-width: 600px)" srcset="assets/${file}-narrow.svg"><img src="assets/${file}.svg" ${attrs}></picture>`;
 
@@ -783,25 +789,21 @@ function readme({ tabShares, buttonShares, alts, npm }) {
     PROFILE.tabs
       .map((name, i) => {
         const lit = name === open;
-        return `<a href="#${i ? name : 'top'}">${picture(`tab-${name}${lit ? '-on' : ''}`, `width="${tabShares[i]}%" align="top" alt="${name}${lit ? ' (you are here)' : ''}"`)}</a>`;
+        return `<a href="${jump(i ? name : 'top')}">${picture(`tab-${name}${lit ? '-on' : ''}`, `width="${tabShares[i]}%" align="top" alt="${name}${lit ? ' (you are here)' : ''}"`)}</a>`;
       })
       .join('');
   const screen = (file, tab, anchor = tab, target = tab) =>
-    `<p><a name="${anchor}"></a>${tabRow(tab)}<br><a href="#${target}">${picture(file, `width="100%" align="top" alt="${attr(alts[file])}"`)}</a></p>`;
+    `<p><a name="${anchor}"></a>${tabRow(tab)}<br><a href="${jump(target)}">${picture(file, `width="100%" align="top" alt="${attr(alts[file])}"`)}</a></p>`;
 
   const buttons = PROFILE.buttons
     .map(([key, label, url], i) => `<a href="${url}">${picture(`btn-${key}`, `width="${buttonShares[i]}%" align="top" alt="${attr(label)}"`)}</a>`)
     .join('');
 
+  // Real text, because GitHub's copy button only works on real text. One block
+  // per package, its name and version as a shell comment so pasting stays safe.
   const commands = npmSorted(npm)
-    .map((p) => {
-      const source = PROFILE.npm.source[p.name];
-      const run = PROFILE.npm.run[p.name];
-      return [
-        `**[\`${p.name}\`](https://www.npmjs.com/package/${p.name})** \`${p.version}\`${source ? ` · [source](${source})` : ''}`,
-        ...(run ? ['', '```sh', run, '```'] : []),
-      ].join('\n');
-    })
+    .filter((p) => PROFILE.npm.run[p.name])
+    .map((p) => ['```sh', `# ${p.name} ${p.version}`, PROFILE.npm.run[p.name], '```'].join('\n'))
     .join('\n\n');
 
   return `<!-- Written by scripts/build.mjs. Change the words in scripts/content.mjs, then run it. -->
@@ -813,7 +815,7 @@ ${screen('work', 'work')}
 <summary><code>$ ls ~/work | tail -11</code></summary>
 <br>
 
-<p><a href="#work">${picture('work-more', `width="100%" alt="${attr(alts['work-more'])}"`)}</a></p>
+<p><a href="${jump('work')}">${picture('work-more', `width="100%" alt="${attr(alts['work-more'])}"`)}</a></p>
 
 </details>
 
