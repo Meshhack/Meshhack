@@ -1,0 +1,22 @@
+name: Say hello
+description: Tell me what you're building. This page is public.
+title: "hello: "
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for stopping by. Anything you write here is public, so leave out whatever you'd rather keep private.
+  - type: textarea
+    id: what
+    attributes:
+      label: What are you building, or what do you need?
+      placeholder: The harder the better.
+    validations:
+      required: true
+  - type: input
+    id: reach
+    attributes:
+      label: Where should I reply? (optional)
+      description: Leave blank and I'll answer right here on this page.
+    validations:
+      required: false

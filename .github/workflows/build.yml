@@ -1,0 +1,40 @@
+name: redraw profile
+
+on:
+  schedule:
+    - cron: '23 3 * * *' # 06:23 in Nairobi
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths: ['scripts/**', '.github/workflows/build.yml']
+
+permissions:
+  contents: write
+
+concurrency:
+  group: redraw
+  cancel-in-progress: true
+
+jobs:
+  redraw:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+      - name: Draw the terminal and refresh the npm list
+        id: draw
+        continue-on-error: true
+        run: node scripts/build.mjs
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Commit what changed
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add assets data README.md
+          git diff --cached --quiet || { git commit -m "redraw the skyline"; git push; }
+      - name: Fail if a data source could not be reached
+        if: steps.draw.outcome == 'failure'
+        run: exit 1
