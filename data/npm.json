@@ -16,14 +16,14 @@
       "description": "Cross-agent Daraja and M-Pesa integration skills for Codex, Cursor, Gemini CLI, Antigravity, and Claude Code."
     },
     {
-      "name": "callbackdesk",
-      "version": "0.1.0",
-      "description": "CLI-first callback debugger and replay tool for payment integrations."
-    },
-    {
       "name": "create-safaricom-mini-app",
       "version": "1.0.0",
       "description": "Scaffold a Safaricom Mini Program project with Tailwind CSS support"
+    },
+    {
+      "name": "callbackdesk",
+      "version": "0.1.0",
+      "description": "CLI-first callback debugger and replay tool for payment integrations."
     }
   ]
 }
